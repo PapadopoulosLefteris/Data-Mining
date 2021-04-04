@@ -1,26 +1,26 @@
 import pandas as pd
-import pandasql as ps
+#import pandasql as ps
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import warnings
-
+from sklearn.metrics import accuracy_score
 
 
 def main_menu():
 
     df = pd.read_csv("../healthcare-dataset-stroke-data/healthcare-dataset-stroke-data.csv")
-    warnings.filterwarnings("ignore")
+    warnings.filterwarnings("ignore") #ignores pandas' warnings
 
     while (True):
-        #x = input("Ερώτημα Α (a) ή Β (b)\n")
+        x = input("Ερώτημα Α (a) ή Β (b)\n")
         if x=="a":
             exerciseA(df)
 
         elif x=="b":
-            #x = input("Ερώτηση 1, 2 ή 3\n")
+            x = input("Ερώτηση 1, 2 ή 3\n")
             if x == "1": exerciseB_1(df)
             elif x=="2": exerciseB_2(df)
             elif x=="3": exerciseB_3(df); break
@@ -132,7 +132,6 @@ def exerciseB_3(df):
     print("Total NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(before,after))
-
 
 
 
