@@ -109,7 +109,7 @@ def exerciseB_3(df):
 
     linearReg = LinearRegression()
 
-    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'stroke']]
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi']]
 
     Train_Features = data.dropna().drop(columns='bmi')
     Test_Labels = data.dropna()['bmi']
