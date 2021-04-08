@@ -161,9 +161,9 @@ def exerciseB_4(df):
     na_bmi = pd.Series(knn.predict(prediction_data))
 
 
-    print(df)
+    
     df.loc[df['bmi'].isnull(), 'bmi'] = na_bmi.reindex(np.arange(df['bmi'].isnull().sum())).values
-    print(df.isna().sum())
+    
 
 
 if __name__ == "__main__":
