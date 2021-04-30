@@ -23,7 +23,7 @@ def main_menu():
             x = input("Ερώτηση 1, 2 ή 3\n")
             if x == "1": exerciseB_1(df)
             elif x=="2": exerciseB_2(df)
-            elif x=="3": exerciseB_3(df); break
+            elif x=="3": exerciseB_3(df)
             else: continue
 
         else: break
