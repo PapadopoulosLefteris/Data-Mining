@@ -15,7 +15,7 @@ def main_menu():
     warnings.filterwarnings("ignore") #ignores pandas' warnings
 
     while (True):
-        x = input("Ερώτημα Α (a) ή Β (b)\n")
+        x = input("Ερώτημα Α (a) ή Β (b) ή Γ (c)\n")
         if x=="a":
             exerciseA(df)
 
@@ -25,6 +25,9 @@ def main_menu():
             elif x=="2": exerciseB_2(df)
             elif x=="3": exerciseB_3(df)
             else: continue
+
+        elif x == 'c':
+            exerciseC(df)
 
         else: break
 
@@ -44,26 +47,30 @@ def exerciseA(df):
     plt.show()
 
 
-def exerciseB_1(df):
+def exerciseB_1(df, exC_flag = False):
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β1 για το ερώτημα 1\n
     ___________\n
     Παράμετροι:\n
-    df: DataFrame
+    df: DataFrame\n
+    [exC_flag = False]: Αν είναι true, η συνάρτηση επιστρέφει το νέο dataframe (χρήσιμο για την άσκηση Γ)
     '''
     print("Before: ", list(df.columns.values),"\n")
 
     df_1 = df.drop("bmi", axis="columns", inplace=False) #drop a column
 
+    if (exC_flag): return df_1
+
     print("After: ", list(df_1.columns.values), "\n")
 
 
-def exerciseB_2(df):
+def exerciseB_2(df, exC_flag = False):
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β2 για το ερώτημα 1\n
     ___________\n
     Παράμετροι:\n
-    df: DataFrame
+    df: DataFrame\n
+    [exC_flag = False]: Αν είναι true, η συνάρτηση επιστρέφει το νέο dataframe (χρήσιμο για την άσκηση Γ)
     '''
     mean_bmi = df['bmi'].mean()
     print("Mean of BMI: ", mean_bmi, "\n")
@@ -73,18 +80,20 @@ def exerciseB_2(df):
     total_na_df = df['bmi'].isna().sum()
     total_na_df_2 =  df_2['bmi'].isna().sum()
 
+    if (exC_flag): return df_2
 
     print("Total NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(total_na_df,total_na_df_2))
 
 
-def exerciseB_3(df):
+def exerciseB_3(df, exC_flag = False):
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β3 για το ερώτημα 1\n
     ___________\n
     Παράμετροι:\n
-    df: DataFrame
+    df: DataFrame\n
+    [exC_flag = False]: Αν είναι true, η συνάρτηση επιστρέφει το νέο dataframe (χρήσιμο για την άσκηση Γ)
     '''
 
     '''
@@ -120,7 +129,7 @@ def exerciseB_3(df):
 
     predictions = linearReg.predict(Test_Features)
 
-    x = input("Να εκτυπωθούν τα προβλεπόμενα αποτελέσματα; Y/n\n")
+    if (not exC_flag): x = input("Να εκτυπωθούν τα προβλεπόμενα αποτελέσματα; Y/n\n")
     if (x == 'y' or x=='Y'): print(predictions)
 
     data.loc[data.bmi.isna(), 'bmi'] = predictions
@@ -128,11 +137,19 @@ def exerciseB_3(df):
     before = df['bmi'].isna().sum()
     after = data['bmi'].isna().sum()
 
+    if (exC_flag): return data
 
     print("Total NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(before,after))
 
+
+def exerciseC(df):
+    data_b1 = exerciseB_1(df, True)
+    data_b2 = exerciseB_2(df, True)
+    data_b3 = exerciseB_3(df, True)
+
+    
 
 
 if __name__ == "__main__":
