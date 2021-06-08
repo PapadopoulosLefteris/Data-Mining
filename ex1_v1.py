@@ -125,8 +125,10 @@ def exerciseB_3(df, exC_flag = False):
 
     data = df.copy(deep=True)
 
-    Train_Features = data.dropna().drop(columns=['bmi', 'id'])
+    Train_Features = data.dropna().drop(columns=['bmi', 'id', 'stroke'])
     Test_Labels = data.dropna()['bmi']
+
+    X_train, X_test, y_train, y_test = train_test_split(Train_Features, Test_Labels, test_size=0.10)
 
     linearReg.fit(Train_Features, Test_Labels)
 
@@ -147,6 +149,11 @@ def exerciseB_3(df, exC_flag = False):
 
     if (exC_flag): return data
 
+    # 
+    # aError = y_test - y_pred
+
+    # plt.hist(aError, bi)
+    # plt.show()
     print("Total NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(before,after))
