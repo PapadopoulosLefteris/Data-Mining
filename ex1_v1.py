@@ -6,8 +6,9 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import warnings
-# from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsClassifier
 
 
 def main_menu():
@@ -89,6 +90,24 @@ def exerciseB_3(df):
     df: DataFrame
     '''
 
+    '''
+    linearReg = LinearRegression()
+
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'stroke']]
+
+    data.fillna({'bmi':0}, inplace=True)
+
+    X = data.drop(columns='bmi')
+    y = data['bmi'].values
+    X_train, X_test, y_train, _ = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    linearReg.fit(X_train, y_train)
+
+    y_pred = linearReg.predict(X_test)
+
+    print(len(y_pred))
+    '''
+
     linearReg = LinearRegression()
 
     data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'stroke']]
@@ -125,7 +144,7 @@ def exerciseB_4(df):
     Παράμετροι:\n
     df: DataFrame
     '''
-    
+
     data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi']]
 
     train_data = data.dropna()
@@ -133,28 +152,55 @@ def exerciseB_4(df):
 
     train_bmi = train_data['bmi']
 
-    train_data.drop(columns='bmi',inplace=True)
-    prediction_data.drop(columns='bmi',inplace=True)
-    
+    train_data.drop(columns='bmi', inplace=True)
+    prediction_data.drop(columns='bmi', inplace=True)
+
     X_train, X_test, y_train, y_test = train_test_split(train_data, train_bmi, test_size=0.1)
 
     knn = KNeighborsRegressor()
-    knn.fit(X_train,y_train)
+    knn.fit(X_train, y_train)
 
-    y_pred = knn.predict(X_test)
-    # print(knn.score(train_data,train_bmi))
-
-    theError = y_pred - y_test
-
-    plt.hist(theError, bins=10)
-    plt.show()
-
+    # y_pred = knn.predict(X_test)
+    # # print(knn.score(train_data,train_bmi))
+    #
+    # theError = y_pred - y_test
+    #
+    # plt.hist(theError, bins=10)
+    # plt.show()
     na_bmi = pd.Series(knn.predict(prediction_data))
-
-
-    # print(df)
     df.loc[df['bmi'].isnull(), 'bmi'] = na_bmi.reindex(np.arange(df['bmi'].isnull().sum())).values
-    # print(df.isna().sum())
+
+
+    df['smoking_status'].replace('Unknown', np.nan, inplace=True)
+    df['smoking_status'] = df['smoking_status'].astype('category').cat.codes
+    df['smoking_status'].replace(-1, np.nan, inplace=True)
+
+
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'smoking_status']]
+    train_data = data.dropna()
+
+    prediction_data = data.loc[data.smoking_status.isna()]
+    train_smoking = train_data['smoking_status']
+
+    train_data.drop(columns='smoking_status', inplace=True)
+    prediction_data.drop(columns='smoking_status', inplace=True)
+
+    X_train, X_test, y_train, y_test = train_test_split(train_data, train_smoking, test_size=0.1)
+
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+
+    #
+    # y_pred = knn.predict(X_test)
+    #
+    # theError = y_pred - y_test
+    #
+    # plt.hist(theError, bins=7)
+    # plt.show()
+    na_smoking_status = pd.Series(knn.predict(prediction_data))
+    df.loc[df['smoking_status'].isnull(), 'smoking_status'] = na_smoking_status.reindex(np.arange(df['smoking_status'].isnull().sum())).values
+
+
 
 
 if __name__ == "__main__":
