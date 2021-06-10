@@ -130,11 +130,9 @@ def exerciseB_3(df, exC_flag = False):
 
     X_train, X_test, y_train, y_test = train_test_split(Train_Features, Test_Labels, test_size=0.10)
 
-    linearReg.fit(Train_Features, Test_Labels)
+    linearReg.fit(X_train, y_train)
 
-    Test_Features = data[data['bmi'].isna()].drop(columns=['bmi', 'id'])
-
-    #print(Test_Features, len(Test_Features), end='\n\n')
+    Test_Features = data[data['bmi'].isna()].drop(columns=['bmi', 'id', 'stroke'])
 
     predictions = linearReg.predict(Test_Features)
 
@@ -149,11 +147,11 @@ def exerciseB_3(df, exC_flag = False):
 
     if (exC_flag): return data
 
-    # 
-    # aError = y_test - y_pred
+    y_pred = linearReg.predict(X_test)
+    aError = y_test - y_pred
+    plt.hist(aError, bins=10)
+    plt.show()
 
-    # plt.hist(aError, bi)
-    # plt.show()
     print("Total NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(before,after))
