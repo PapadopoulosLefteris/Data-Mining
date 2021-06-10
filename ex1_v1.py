@@ -83,9 +83,11 @@ def exerciseB_2(df, exC_flag = False):
 
     # print(df.groupby('smoking_status').size())
 
-    #x = df['smoking_status'].count()
+    x = df['smoking_status'].value_counts()
 
-    #print(x)
+    index = np.where(x==np.max(x))
+
+    df.replace(np.nan, index[0][0], inplace=True)
 
     if (not exC_flag): print("Mean of BMI: ", mean_bmi, "\n")
 
