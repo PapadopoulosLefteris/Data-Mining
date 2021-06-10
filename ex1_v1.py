@@ -134,6 +134,12 @@ def exerciseB_3(df, exC_flag = False):
 
     data = df.copy(deep=True)
 
+    x = data['smoking_status'].value_counts()
+
+    index = np.where(x==np.max(x))
+
+    data.replace(np.nan, index[0][0], inplace=True)
+
     Train_Features = data.dropna().drop(columns=['bmi', 'id', 'stroke'])
     Test_Labels = data.dropna()['bmi']
 
