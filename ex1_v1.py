@@ -81,7 +81,7 @@ def exerciseB_2(df, exC_flag = False):
     '''
     mean_bmi = df['bmi'].mean()
 
-    df['smoking_status'].values
+    print(df.groupby('smoking_status').size())
 
     if (not exC_flag): print("Mean of BMI: ", mean_bmi, "\n")
 
