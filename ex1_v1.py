@@ -80,6 +80,9 @@ def exerciseB_2(df, exC_flag = False):
     [exC_flag = False]: boolean - Αν είναι true, η συνάρτηση επιστρέφει το νέο dataframe (χρήσιμο για την άσκηση Γ)
     '''
     mean_bmi = df['bmi'].mean()
+
+    df['smoking_status'].values
+
     if (not exC_flag): print("Mean of BMI: ", mean_bmi, "\n")
 
     df_2 = df.fillna({'bmi':mean_bmi}) #fills the NA values of the column "BMI" with the mean
