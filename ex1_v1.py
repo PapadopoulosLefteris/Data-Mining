@@ -237,5 +237,7 @@ def catCodes(df):
 
     df['smoking_status'] = df['smoking_status'].astype('category').cat.codes
 
+    df["smoking_status"].replace(-1, np.nan, inplace=True)
+
 if __name__ == "__main__":
     main_menu()
