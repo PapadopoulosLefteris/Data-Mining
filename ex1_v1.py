@@ -267,7 +267,7 @@ def exerciseC(df):
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)#, random_state=42, stratify=y)   #<-------     
 
-        random_forest = RandomForestClassifier(n_estimators=10)
+        random_forest = RandomForestClassifier(n_estimators=50)
         
         #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         # sc = StandardScaler()
@@ -291,7 +291,8 @@ def exerciseC(df):
         #     print(j)
         # return
         #Metrics
-        f1 = metrics.f1_score(y_test, y_pred)
+        
+        f1 = metrics.f1_score(y_test, y_pred, zero_division=1)
 
         pr = metrics.precision_score(y_test, y_pred)
 
@@ -300,7 +301,7 @@ def exerciseC(df):
         #print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
         print("Με δεδομένα τo μητρώο του ερωτήματος Β{}, η απόδοση του μοντέλου είναι:\nf1 score = {:f}\nprecision = {:f}\nrecall = {:f}\n\n\n".format(i,f1,pr,rec))
         i+=1
-
+        #return
         '''https://stackoverflow.com/questions/62672842/how-to-improve-f1-score-for-classification'''
 
     
