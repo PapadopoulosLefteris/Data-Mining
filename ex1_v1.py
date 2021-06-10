@@ -213,12 +213,6 @@ def exerciseB_4(df):
     na_bmi = pd.Series(knn.predict(prediction_data))
     df.loc[df['bmi'].isnull(), 'bmi'] = na_bmi.reindex(np.arange(df['bmi'].isnull().sum())).values
 
-
-    df['smoking_status'].replace('Unknown', np.nan, inplace=True)
-    df['smoking_status'] = df['smoking_status'].astype('category').cat.codes
-    df['smoking_status'].replace(-1, np.nan, inplace=True)
-
-
     data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'smoking_status']]
     train_data = data.dropna()
 
