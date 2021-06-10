@@ -11,7 +11,14 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
+
 from sklearn import metrics
+
+import warnings
+from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neighbors import KNeighborsClassifier
+
 
 
 def main_menu():
@@ -27,10 +34,12 @@ def main_menu():
             exerciseA(df)
 
         elif x=="b":
-            x = input("Ερώτηση 1, 2 ή 3\n")
+            x = input("Ερώτηση 1, 2, 3 ή 4\n")
             if x == "1": exerciseB_1(df)
             elif x=="2": exerciseB_2(df)
             elif x=="3": exerciseB_3(df)
+            elif x=="4": exerciseB_4(df)
+
             else: continue
 
         elif x == 'c':
@@ -171,7 +180,70 @@ def exerciseB_3(df, exC_flag = False):
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(before,after))
 
+def exerciseB_4(df):
+    '''
+    Συνάρτηση που υλοποιεί την λύση της άσκησης Β4 για το ερώτημα 1\n
+    ___________\n
+    Παράμετροι:\n
+    df: DataFrame
+    '''
 
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi']]
+
+    train_data = data.dropna()
+    prediction_data = data.loc[data.bmi.isna()]
+
+    train_bmi = train_data['bmi']
+
+    train_data.drop(columns='bmi', inplace=True)
+    prediction_data.drop(columns='bmi', inplace=True)
+
+    X_train, X_test, y_train, y_test = train_test_split(train_data, train_bmi, test_size=0.1)
+
+    knn = KNeighborsRegressor()
+    knn.fit(X_train, y_train)
+
+    # y_pred = knn.predict(X_test)
+    # # print(knn.score(train_data,train_bmi))
+    #
+    # theError = y_pred - y_test
+    #
+    # plt.hist(theError, bins=10)
+    # plt.show()
+    na_bmi = pd.Series(knn.predict(prediction_data))
+    df.loc[df['bmi'].isnull(), 'bmi'] = na_bmi.reindex(np.arange(df['bmi'].isnull().sum())).values
+
+
+    df['smoking_status'].replace('Unknown', np.nan, inplace=True)
+    df['smoking_status'] = df['smoking_status'].astype('category').cat.codes
+    df['smoking_status'].replace(-1, np.nan, inplace=True)
+
+
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'smoking_status']]
+    train_data = data.dropna()
+
+    prediction_data = data.loc[data.smoking_status.isna()]
+    train_smoking = train_data['smoking_status']
+
+    train_data.drop(columns='smoking_status', inplace=True)
+    prediction_data.drop(columns='smoking_status', inplace=True)
+
+    X_train, X_test, y_train, y_test = train_test_split(train_data, train_smoking, test_size=0.1)
+
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+
+    #
+    # y_pred = knn.predict(X_test)
+    #
+    # theError = y_pred - y_test
+    #
+    # plt.hist(theError, bins=7)
+    # plt.show()
+    na_smoking_status = pd.Series(knn.predict(prediction_data))
+    df.loc[df['smoking_status'].isnull(), 'smoking_status'] = na_smoking_status.reindex(np.arange(df['smoking_status'].isnull().sum())).values
+    
+    
 def exerciseC(df):
     data_b1 = exerciseB_1(df, True)
     data_b2 = exerciseB_2(df, True)
@@ -238,6 +310,7 @@ def catCodes(df):
     df['smoking_status'] = df['smoking_status'].astype('category').cat.codes
 
     df["smoking_status"].replace(-1, np.nan, inplace=True)
+
 
 if __name__ == "__main__":
     main_menu()
