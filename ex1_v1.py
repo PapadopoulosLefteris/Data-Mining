@@ -177,7 +177,7 @@ def exerciseC(df):
 
         #print(dt)
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)   #<-------     
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)#, random_state=42, stratify=y)   #<-------     
 
         random_forest = RandomForestClassifier(n_estimators=100)
         
