@@ -156,14 +156,14 @@ def exerciseB_4(df):
     
     knn = KNeighborsRegressor()
     knn.fit(train_data,train_bmi)
-    print(knn.score(train_data,train_bmi))
+    # print(knn.score(train_data,train_bmi))
 
     na_bmi = pd.Series(knn.predict(prediction_data))
 
 
-    print(df)
+    # print(df)
     df.loc[df['bmi'].isnull(), 'bmi'] = na_bmi.reindex(np.arange(df['bmi'].isnull().sum())).values
-    print(df.isna().sum())
+    # print(df.isna().sum())
 
 
 if __name__ == "__main__":
