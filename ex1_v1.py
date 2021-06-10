@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 import warnings
-from sklearn.metrics import accuracy_score
+# from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsRegressor
 
 
