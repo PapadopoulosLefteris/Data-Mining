@@ -96,11 +96,13 @@ def exerciseB_2(df, exC_flag = False):
 
     index = np.where(x==np.max(x))
 
-    df.replace(np.nan, index[0][0], inplace=True)
+    
 
     if (not exC_flag): print("Mean of BMI: ", mean_bmi, "\n")
 
     df_2 = df.fillna({'bmi':mean_bmi}) #fills the NA values of the column "BMI" with the mean
+
+    df_2.replace(np.nan, index[0][0], inplace=True)
 
     total_na_df = df['bmi'].isna().sum()
     total_na_df_2 =  df_2['bmi'].isna().sum()
@@ -110,6 +112,10 @@ def exerciseB_2(df, exC_flag = False):
     print("Total NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(total_na_df,total_na_df_2))
+
+    print("\n\nTotal NaN values in column 'smoking_status':")
+    print("---------------------------------")
+    print("Before: {}\nAfter: {}\n".format(df['smoking_status'].isna().sum(),df_2['smoking_status'].isna().sum()))
 
 
 def exerciseB_3(df, exC_flag = False):
@@ -147,7 +153,7 @@ def exerciseB_3(df, exC_flag = False):
 
     index = np.where(x==np.max(x))
 
-    data.replace(np.nan, index[0][0], inplace=True)
+    data.replace({"smoking_status": np.nan}, index[0][0], inplace=True)
 
     Train_Features = data.dropna().drop(columns=['bmi', 'id', 'stroke'])
     Test_Labels = data.dropna()['bmi']
@@ -236,14 +242,15 @@ def exerciseB_4(df):
     # plt.show()
     na_smoking_status = pd.Series(knn.predict(prediction_data))
     df.loc[df['smoking_status'].isnull(), 'smoking_status'] = na_smoking_status.reindex(np.arange(df['smoking_status'].isnull().sum())).values
-    
+    return df
     
 def exerciseC(df):
     data_b1 = exerciseB_1(df, True)
     data_b2 = exerciseB_2(df, True)
     data_b3 = exerciseB_3(df, True)
+    data_b4 = exerciseB_4(df)
 
-    set_of_data = [data_b1, data_b2, data_b3]
+    set_of_data = [data_b1, data_b2, data_b3, data_b4]
 
     #print(set_of_data[0])
     #print(set_of_data[1])
@@ -254,25 +261,35 @@ def exerciseC(df):
 
     for dt in set_of_data:
         X = dt.drop(columns=["stroke", "id"])
-        y = dt["stroke"].values
+        y = dt["stroke"]
 
         #print(dt)
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)#, random_state=42, stratify=y)   #<-------     
 
-        random_forest = RandomForestClassifier(n_estimators=100)
+        random_forest = RandomForestClassifier(n_estimators=10)
         
         #vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-        sc = StandardScaler()
+        # sc = StandardScaler()
 
-        X_train = sc.fit_transform(X_train)
-        X_test = sc.transform(X_test)
+        # X_train = sc.fit_transform(X_train)
+        # X_test = sc.transform(X_test)
         #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         random_forest.fit(X_train, y_train)
 
+        y_ = random_forest.predict(X_train)
+
+        print(metrics.f1_score(y_train, y_))
+
+        # for j in y_train:
+        #     print(j)
+
+        
         #Predictions
         y_pred = random_forest.predict(X_test)
-
+        # for j in y_pred:
+        #     print(j)
+        # return
         #Metrics
         f1 = metrics.f1_score(y_test, y_pred)
 
