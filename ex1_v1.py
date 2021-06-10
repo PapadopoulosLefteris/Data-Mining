@@ -89,24 +89,6 @@ def exerciseB_3(df):
     df: DataFrame
     '''
 
-    '''
-    linearReg = LinearRegression()
-
-    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'stroke']]
-
-    data.fillna({'bmi':0}, inplace=True)
-
-    X = data.drop(columns='bmi')
-    y = data['bmi'].values
-    X_train, X_test, y_train, _ = train_test_split(X, y, test_size=0.3, random_state=42)
-
-    linearReg.fit(X_train, y_train)
-
-    y_pred = linearReg.predict(X_test)
-
-    print(len(y_pred))
-    '''
-
     linearReg = LinearRegression()
 
     data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'stroke']]
