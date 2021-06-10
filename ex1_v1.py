@@ -154,9 +154,18 @@ def exerciseB_4(df):
     train_data.drop(columns='bmi',inplace=True)
     prediction_data.drop(columns='bmi',inplace=True)
     
+    X_train, X_test, y_train, y_test = train_test_split(train_data, train_bmi, test_size=0.1)
+
     knn = KNeighborsRegressor()
-    knn.fit(train_data,train_bmi)
+    knn.fit(X_train,y_train)
+
+    y_pred = knn.predict(X_test)
     # print(knn.score(train_data,train_bmi))
+
+    theError = y_pred - y_test
+
+    plt.hist(theError, bins=10)
+    plt.show()
 
     na_bmi = pd.Series(knn.predict(prediction_data))
 
