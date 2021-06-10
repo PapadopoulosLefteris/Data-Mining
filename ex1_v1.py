@@ -81,7 +81,11 @@ def exerciseB_2(df, exC_flag = False):
     '''
     mean_bmi = df['bmi'].mean()
 
-    print(df.groupby('smoking_status').size())
+    # print(df.groupby('smoking_status').size())
+
+    #x = df['smoking_status'].count()
+
+    #print(x)
 
     if (not exC_flag): print("Mean of BMI: ", mean_bmi, "\n")
 
@@ -220,6 +224,9 @@ def catCodes(df):
     df['ever_married'] = df['ever_married'].astype('category').cat.codes
     df['work_type'] = df['work_type'].astype('category').cat.codes
     df['Residence_type'] = df['Residence_type'].astype('category').cat.codes
+
+    df["smoking_status"].replace("Unknown", np.nan, inplace=True)
+
     df['smoking_status'] = df['smoking_status'].astype('category').cat.codes
 
 if __name__ == "__main__":
