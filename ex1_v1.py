@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.core.frame import DataFrame
 # import pandasql as ps
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -54,7 +55,7 @@ def main_menu():
             break
 
 
-def exerciseA(df):
+def exerciseA(df) -> None:
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης A για το ερώτημα 1\r
     ___________\n
@@ -68,7 +69,7 @@ def exerciseA(df):
     plt.show()
 
 
-def exerciseB_1(df, exC_flag=False):
+def exerciseB_1(df: DataFrame, exC_flag: bool = False) -> DataFrame:
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β1 για το ερώτημα 1\r
     ___________\n
@@ -85,7 +86,7 @@ def exerciseB_1(df, exC_flag=False):
     print("After: ", list(df_1.columns.values), "\n")
 
 
-def exerciseB_2(df, exC_flag=False):
+def exerciseB_2(df: DataFrame, exC_flag: bool = False) -> DataFrame:
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β2 για το ερώτημα 1\r
     ___________\n
@@ -121,7 +122,7 @@ def exerciseB_2(df, exC_flag=False):
     print("Before: {}\nAfter: {}\n".format(df['smoking_status'].isna().sum(), df_2['smoking_status'].isna().sum()))
 
 
-def exerciseB_3(df, exC_flag=False):
+def exerciseB_3(df: DataFrame, exC_flag: bool =False) -> DataFrame:
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β3 για το ερώτημα 1\r
     ___________\n
@@ -201,10 +202,10 @@ def exerciseB_3(df, exC_flag=False):
     print("Before: {}\nAfter: {}\n".format(before_smoking, after_smoking))
 
 
-def exerciseB_4(df):
+def exerciseB_4(df: DataFrame) -> DataFrame:
     '''
     Συνάρτηση που υλοποιεί την λύση της άσκησης Β4 για το ερώτημα 1\n
-    ___________\n
+    ___________\r
     Παράμετροι:\n
     df: DataFrame
     '''
@@ -294,14 +295,20 @@ def exerciseB_4(df):
 #
 #     return f1,precision,recall
 
-def exerciseC(df):
+def exerciseC(df: DataFrame) -> None:
+    '''
+    Συνάρτηση που υλοποιεί την λύση της άσκησης Γ για το ερώτημα 1\n
+    ___________\r
+    Παράμετροι:\n
+    df: DataFrame
+    '''
     data_b1 = exerciseB_1(df, True)
     data_b2 = exerciseB_2(df, True)
     data_b3 = exerciseB_3(df, True)
     data_b4 = exerciseB_4(df)
 
     set_of_data = [data_b1, data_b2, data_b3, data_b4]
-
+    
     i = 1
     for dt in set_of_data:
         X = dt.drop(columns=["stroke", "id"])
@@ -356,7 +363,7 @@ def exerciseC(df):
         i += 1
 
 
-def catCodes(df):
+def catCodes(df: DataFrame):
     '''
     Μετατροπή των μη αλφαριθμητικών δεδομένων σε αλφαριθμητικά\r
     ___________\n
