@@ -330,20 +330,22 @@ def exerciseC(df):
         y_test = y_test.to_numpy()
 
 
-        print(classification_report(y_test,y_pred))
+        
         f1 = metrics.f1_score(y_test, y_pred)
 
         pr = metrics.precision_score(y_test, y_pred)
 
         rec = metrics.recall_score(y_test, y_pred)
 
-            # f1,pr,rec = scores(y_pred,y_test)
-        print(
-        "Με δεδομένα τo μητρώο του ερωτήματος Β{}, η απόδοση του μοντέλου είναι:\nf1 score = {:f}\nprecision = {:f}\nrecall = {:f}\n\n\n".format(
-        i, f1, pr, rec))
-        i += 1
+        # f1,pr,rec = scores(y_pred,y_test)
+        # print(
+        # "Με δεδομένα τo μητρώο του ερωτήματος Β{}, η απόδοση του μοντέλου είναι:\nf1 score = {:f}\nprecision = {:f}\nrecall = {:f}\n\n\n".format(
+        # i, f1, pr, rec))
 
-        '''https://stackoverflow.com/questions/62672842/how-to-improve-f1-score-for-classification'''
+        print("Με δεδομένα τo μητρώο του ερωτήματος Β{}, η απόδοση του μοντέλου είναι:".format(i))
+        print(classification_report(y_test,y_pred))
+
+        i += 1
 
 
 def catCodes(df):
