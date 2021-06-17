@@ -27,7 +27,9 @@ def main_menu():
     catCodes(df)
 
     while (True):
+
         x = input("Ερώτημα Α (a) ή Β (b) ή Γ (c)\n")
+        
         if x == "a":
             exerciseA(df)
 
@@ -114,7 +116,7 @@ def exerciseB_2(df, exC_flag=False):
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(total_na_df, total_na_df_2))
 
-    print("\n\nTotal NaN values in column 'smoking_status':")
+    print("\nTotal NaN values in column 'smoking_status':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(df['smoking_status'].isna().sum(), df_2['smoking_status'].isna().sum()))
 
@@ -128,18 +130,6 @@ def exerciseB_3(df, exC_flag=False):
     [exC_flag = False]: boolean - Αν είναι true, η συνάρτηση επιστρέφει το νέο dataframe (χρήσιμο για την άσκηση Γ)
     '''
 
-    '''
-    linearReg = LinearRegression()
-    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'stroke']]
-    data.fillna({'bmi':0}, inplace=True)
-    X = data.drop(columns='bmi')
-    y = data['bmi'].values
-    X_train, X_test, y_train, _ = train_test_split(X, y, test_size=0.3, random_state=42)
-    linearReg.fit(X_train, y_train)
-    y_pred = linearReg.predict(X_test)
-    print(len(y_pred))
-    '''
-
     linearReg = LinearRegression()
     logReg = LogisticRegression()
 
@@ -150,9 +140,13 @@ def exerciseB_3(df, exC_flag=False):
 
     X_train, X_test, y_train, y_test = train_test_split(Train_Features, Test_Labels, test_size=0.10)
     logReg.fit(X_train,y_train)
+    
+    X_test1 = X_test
+    y_test1 = y_test
+
 
     Test_Features = data[data['smoking_status'].isna()].drop(columns=['smoking_status', 'bmi', 'id', 'stroke'])
-    print(classification_report(logReg.predict(X_test), y_test))
+    
     predictions = logReg.predict(Test_Features)
 
     data.loc[data.smoking_status.isna(), 'smoking_status'] = predictions
@@ -185,6 +179,9 @@ def exerciseB_3(df, exC_flag=False):
     before = df['bmi'].isna().sum()
     after = data['bmi'].isna().sum()
 
+    before_smoking = df['smoking_status'].isna().sum()
+    after_smoking = data['smoking_status'].isna().sum()
+
     if (exC_flag): return data
 
     # y_pred = linearReg.predict(X_test)
@@ -192,9 +189,16 @@ def exerciseB_3(df, exC_flag=False):
     # plt.hist(aError, bins=10)
     # plt.show()
 
-    print("Total NaN values in column 'bmi':")
+    print("\nTotal NaN values in column 'bmi':")
     print("---------------------------------")
     print("Before: {}\nAfter: {}\n".format(before, after))
+
+    print("Αποτελέσματα κατηγοριοποίησης του smoking status:\n")
+    print(classification_report(logReg.predict(X_test1), y_test1))
+
+    print("\nTotal NaN values in column 'smoking_status':")
+    print("---------------------------------")
+    print("Before: {}\nAfter: {}\n".format(before_smoking, after_smoking))
 
 
 def exerciseB_4(df):
@@ -205,7 +209,11 @@ def exerciseB_4(df):
     df: DataFrame
     '''
 
-    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi']]
+    
+
+    # data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi']]
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'ever_married', 'work_type', 'Residence_type']]
+
 
     train_data = data.dropna()
     prediction_data = data.loc[data.bmi.isna()]
@@ -230,7 +238,9 @@ def exerciseB_4(df):
     na_bmi = pd.Series(knn.predict(prediction_data))
     df.loc[df['bmi'].isnull(), 'bmi'] = na_bmi.reindex(np.arange(df['bmi'].isnull().sum())).values
 
-    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'smoking_status']]
+    # data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'smoking_status']]
+    data = df[['age', 'hypertension', 'heart_disease', 'avg_glucose_level', 'bmi', 'smoking_status', 'ever_married', 'work_type', 'Residence_type']]
+
     train_data = data.dropna()
 
     prediction_data = data.loc[data.smoking_status.isna()]
@@ -291,10 +301,6 @@ def exerciseC(df):
     data_b4 = exerciseB_4(df)
 
     set_of_data = [data_b1, data_b2, data_b3, data_b4]
-    # set_of_data = [data_b1]
-    # print(set_of_data[0])
-    # print(set_of_data[1])
-    # print(set_of_data[2])
 
     i = 1
     for dt in set_of_data:
@@ -306,13 +312,15 @@ def exerciseC(df):
         X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                             test_size=0.25)  # , random_state=42, stratify=y)   #<-------
 
-        random_forest = RandomForestClassifier(n_estimators=3,random_state=69,class_weight='balanced_subsample')
-        # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+        random_forest = RandomForestClassifier(n_estimators=3,random_state=55,class_weight='balanced_subsample')
+        # 3,55
+        # 3, 42
+
         # sc = StandardScaler()
 
         # X_train = sc.fit_transform(X_train)
         # X_test = sc.transform(X_test)
-        # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
         random_forest.fit(X_train, y_train)
 
         y_ = random_forest.predict(X_train)
@@ -331,11 +339,11 @@ def exerciseC(df):
 
 
         
-        f1 = metrics.f1_score(y_test, y_pred)
+        # f1 = metrics.f1_score(y_test, y_pred)
 
-        pr = metrics.precision_score(y_test, y_pred)
+        # pr = metrics.precision_score(y_test, y_pred)
 
-        rec = metrics.recall_score(y_test, y_pred)
+        # rec = metrics.recall_score(y_test, y_pred)
 
         # f1,pr,rec = scores(y_pred,y_test)
         # print(
